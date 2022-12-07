@@ -1,0 +1,9 @@
+{
+  "transform": {
+    "^.+\\.tsx?$": "esbuild-jest"
+  },
+  "watchPlugins": [
+    "jest-watch-typeahead/filename",
+    "jest-watch-typeahead/testname"
+  ]
+}
