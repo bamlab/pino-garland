@@ -5,5 +5,5 @@
     "noEmit": true,
     "rootDir": "src"
   },
-  "exclude": ["dist", "rollup.config.js", "test"]
+  "exclude": ["dist", "prettier.config.cjs", "rollup.config.js", "test"]
 }
