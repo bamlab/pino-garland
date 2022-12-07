@@ -13,7 +13,7 @@
   },
   "keywords": [],
   "author": "TychoTa",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@tsconfig/node18-strictest-esm": "^1.0.1",
     "@tsconfig/recommended": "^1.0.1",
