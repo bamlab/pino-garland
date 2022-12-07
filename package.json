@@ -2,11 +2,25 @@
   "name": "pino-garland",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "dist/pino-garland.cjs",
+  "module": "dist/pino-garland.mjs",
+  "typings": "dist/pino-garland.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup --config"
   },
   "keywords": [],
   "author": "TychoTa",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@tsconfig/node18-strictest-esm": "^1.0.1",
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/node": "^18.11.11",
+    "esbuild": "^0.16.1",
+    "rollup": "^3.6.0",
+    "rollup-plugin-dts": "^5.0.0",
+    "rollup-plugin-esbuild": "^5.0.0",
+    "typescript": "^4.9.3"
+  }
 }
