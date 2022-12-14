@@ -1,4 +1,4 @@
-import { FormatDate, FormatLevel, FormatRequestId } from "../src/format";
+import { FormatContext, FormatDate, FormatLevel, FormatRequestId } from "../src/format";
 
 describe("format", () => {
   describe("formatDate", () => {
@@ -99,4 +99,37 @@ describe("format", () => {
     });
   });
 
+  describe("formatContext", () => {
+    it("should format a context", () => {
+      // Given
+      const logData = { context: "my-context" };
+      // When
+      const formatContext = new FormatContext();
+      const formattedContext = formatContext.format(logData);
+      // Then
+      expect(formattedContext).toEqual("[      my-context      ]");
+    });
+
+    it("should refuse to format if the log data does not have a context", () => {
+      // Given
+      const logData = {};
+      // When
+      const formatContext = new FormatContext();
+      const canFormat = formatContext.canFormat(logData);
+      // Then
+      expect(canFormat).toEqual(false);
+    });
+    
+    it("should return a placeholder of the right length", () => {
+      // Given
+      const completeLogData = { context: "my-context" };
+      // When
+      const formatContext = new FormatContext();
+      const formattedContext = formatContext.format(completeLogData);
+      const placeholder = formatContext.placeholder();
+      // Then
+      expect(placeholder.length).toEqual(formattedContext.length);
+      expect(placeholder).toEqual("[   -- no context --   ]");
+    });
+  });
 });

@@ -88,3 +88,27 @@ export class FormatLevel extends Format {
     return chalk.bold(`🤷‍♂️`);
   }
 }
+
+export class FormatContext extends Format {
+  private MAX_SIZE = 22;
+
+  constructor() {
+    super();
+  }
+
+  canFormat(logData: { context?: string }): boolean {
+    return logData.context !== undefined;
+  }
+
+  format(logData: { context: string }): string {
+    const { context } = logData;
+    const shortContext = context.substring(0, this.MAX_SIZE);
+    const paddedContext = center(shortContext, this.MAX_SIZE);
+    return chalk.yellow(`[${paddedContext}]`);
+  }
+
+  placeholder(): string {
+    const paddedPlaceholder = center("-- no context --", this.MAX_SIZE);
+    return chalk.grey(`[${paddedPlaceholder}]`);
+  }
+}

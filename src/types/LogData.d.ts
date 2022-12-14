@@ -4,6 +4,7 @@ interface LogData {
   req: {
     id: string;
   };
+  context: string;
 }
 
 interface LogDataWithLevelNumber extends LogData {
