@@ -1,4 +1,4 @@
-import { FormatDate } from "../src/format";
+import { FormatDate, FormatRequestId } from "../src/format";
 
 describe("format", () => {
   describe("formatDate", () => {
@@ -31,6 +31,40 @@ describe("format", () => {
       const placeholder = formatDate.placeholder();
       // Then
       expect(placeholder).toEqual(" ".repeat(formattedDate.length));
+    });
+  });
+
+  describe("formatRequestId", () => {
+    it("should format a request id", () => {
+      // Given
+      const logData = { req: { id: "722449b6-850b-4c50-8784-1ca18007b588" } };
+      // When
+      const formatRequestId = new FormatRequestId();
+      const formattedRequestId = formatRequestId.format(logData);
+      // Then
+      expect(formattedRequestId).toEqual("[req: 722449b6-850b-4c50]");
+    });
+
+    it("should refuse to format if the log data does not have a request id", () => {
+      // Given
+      const logData = {};
+      // When
+      const formatRequestId = new FormatRequestId();
+      const canFormat = formatRequestId.canFormat(logData);
+      // Then
+      expect(canFormat).toEqual(false);
+    });
+
+    it("should return a placeholder of the right length", () => {
+      // Given
+      const completeLogData = { req: { id: "722449b6-850b-4c50-8784-1ca18007b588" } };
+      // When
+      const formatRequestId = new FormatRequestId();
+      const formattedRequestId = formatRequestId.format(completeLogData);
+      const placeholder = formatRequestId.placeholder();
+      // Then
+      expect(placeholder.length).toEqual(formattedRequestId.length);
+      expect(placeholder).toEqual("[      no request       ]");
     });
   });
 });

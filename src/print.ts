@@ -1,7 +1,7 @@
 import { EOL } from "node:os";
-import { Format, FormatDate } from "./format";
+import { Format, FormatDate, FormatRequestId } from "./format";
 
-const formatters: Format[] = [new FormatDate()];
+const formatters: Format[] = [new FormatDate(), new FormatRequestId()];
 
 export function print(logData: LogData): string {
   const parts = [];
