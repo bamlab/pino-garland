@@ -1,5 +1,6 @@
 interface LogData {
   level: number | string;
+  time: number;
 }
 
 interface LogDataWithLevelNumber extends LogData {

@@ -3,11 +3,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier",
-  ],
+  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
   overrides: [],
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -15,5 +11,7 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["@typescript-eslint"],
-  rules: {},
+  rules: {
+    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+  },
 };
