@@ -5,6 +5,7 @@ interface LogData {
     id: string;
   };
   context: string;
+  msg: string;
 }
 
 interface LogDataWithLevelNumber extends LogData {

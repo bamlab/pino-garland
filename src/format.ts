@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalk, { ChalkInstance } from "chalk";
 import { center, padNumber } from "./utils/text";
 
 export abstract class Format {
@@ -110,5 +110,72 @@ export class FormatContext extends Format {
   placeholder(): string {
     const paddedPlaceholder = center("-- no context --", this.MAX_SIZE);
     return chalk.grey(`[${paddedPlaceholder}]`);
+  }
+}
+
+function isMarkingRequestStart(message: string): boolean {
+  return message === "REQUEST START";
+}
+
+function isMarkingRequestSuccess(message: string): boolean {
+  return message === "REQUEST SUCCESS";
+}
+
+function isMarkingRequestError(message: string): boolean {
+  return message === "REQUEST ERROR";
+}
+
+export class FormatMessage extends Format {
+  constructor() {
+    super();
+  }
+
+  canFormat(logData: { msg?: string }): boolean {
+    return logData.msg !== undefined;
+  }
+
+  format(logData: { msg: string; level: string }): string {
+    const { msg } = logData;
+
+    if (isMarkingRequestStart(msg)) {
+      return chalk.white("🎤 <--");
+    }
+    if (isMarkingRequestSuccess(msg)) {
+      return chalk.white("🎧 -->");
+    }
+    if (isMarkingRequestError(msg)) {
+      return chalk.white("📢 -->");
+    }
+
+    let color: ChalkInstance;
+    switch (logData.level) {
+      case "trace":
+        color = chalk.white;
+        break;
+      case "debug":
+        color = chalk.yellow;
+        break;
+      case "info":
+        color = chalk.green;
+        break;
+      case "warn":
+        color = chalk.magenta;
+        break;
+      case "error":
+        color = chalk.red;
+        break;
+      case "fatal":
+        color = chalk.white.bgRed;
+        break;
+      default:
+        color = chalk.green;
+        break;
+    }
+
+    return color(msg);
+  }
+
+  placeholder(): string {
+    return "";
   }
 }

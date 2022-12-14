@@ -1,4 +1,4 @@
-import { FormatContext, FormatDate, FormatLevel, FormatRequestId } from "../src/format";
+import { FormatContext, FormatDate, FormatLevel, FormatMessage, FormatRequestId } from "../src/format";
 
 describe("format", () => {
   describe("formatDate", () => {
@@ -119,7 +119,7 @@ describe("format", () => {
       // Then
       expect(canFormat).toEqual(false);
     });
-    
+
     it("should return a placeholder of the right length", () => {
       // Given
       const completeLogData = { context: "my-context" };
@@ -130,6 +130,67 @@ describe("format", () => {
       // Then
       expect(placeholder.length).toEqual(formattedContext.length);
       expect(placeholder).toEqual("[   -- no context --   ]");
+    });
+  });
+
+  describe("formatMessage", () => {
+    it("should format a message", () => {
+      // Given
+      const logData = { msg: "my-message", level: "info" };
+      // When
+      const formatMessage = new FormatMessage();
+      const formattedMessage = formatMessage.format(logData);
+      // Then
+      expect(formattedMessage).toEqual("my-message");
+    });
+
+    it("should refuse to format if the log data does not have a message", () => {
+      // Given
+      const logData = {};
+      // When
+      const formatMessage = new FormatMessage();
+      const canFormat = formatMessage.canFormat(logData);
+      // Then
+      expect(canFormat).toEqual(false);
+    });
+
+    it("should return a placeholder of the right length", () => {
+      // Given
+      // When
+      const formatMessage = new FormatMessage();
+      const placeholder = formatMessage.placeholder();
+      // Then
+      expect(placeholder).toEqual("");
+    });
+
+    it("should format request markers - Start", () => {
+      // Given
+      const logData = { msg: "REQUEST START", level: "info" };
+      // When
+      const formatMessage = new FormatMessage();
+      const formattedMessage = formatMessage.format(logData);
+      // Then
+      expect(formattedMessage).toEqual("🎤 <--");
+    });
+
+    it("should format request markers - Success", () => {
+      // Given
+      const logData = { msg: "REQUEST SUCCESS", level: "info" };
+      // When
+      const formatMessage = new FormatMessage();
+      const formattedMessage = formatMessage.format(logData);
+      // Then
+      expect(formattedMessage).toEqual("🎧 -->");
+    });
+
+    it("should format request markers - Error", () => {
+      // Given
+      const logData = { msg: "REQUEST ERROR", level: "info" };
+      // When
+      const formatMessage = new FormatMessage();
+      const formattedMessage = formatMessage.format(logData);
+      // Then
+      expect(formattedMessage).toEqual("📢 -->");
     });
   });
 });
