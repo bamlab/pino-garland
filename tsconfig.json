@@ -2,8 +2,7 @@
   "extends": "@tsconfig/node18-strictest-esm/tsconfig.json",
   "compilerOptions": {
     "resolveJsonModule": true,
-    "noEmit": true,
-    "rootDir": "src"
+    "noEmit": true
   },
-  "exclude": ["dist", "prettier.config.cjs", "rollup.config.js", "test"]
+  "exclude": ["dist"]
 }

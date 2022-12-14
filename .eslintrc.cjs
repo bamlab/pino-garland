@@ -4,7 +4,14 @@ module.exports = {
     node: true,
   },
   extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
-  overrides: [],
+  overrides: [
+    {
+      files: ["*.cjs"],
+      rules: {
+        "@typescript-eslint/no-var-requires": "off",
+      },
+    },
+  ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: "latest",

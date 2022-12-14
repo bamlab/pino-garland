@@ -3,9 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
+  "files": [
+    "dist",
+    "src",
+    "bin",
+    "LICENSE"
+  ],
   "main": "dist/pino-garland.cjs",
   "module": "dist/pino-garland.mjs",
   "typings": "dist/pino-garland.ts",
+  "bin": {
+    "pino-garland": "bin/pino-garland.js"
+  },
   "scripts": {
     "test": "jest",
     "build": "rollup --config",
@@ -19,6 +28,9 @@
     "@tsconfig/recommended": "^1.0.1",
     "@types/jest": "^29.2.4",
     "@types/node": "^18.11.11",
+    "@types/pump": "^1.1.1",
+    "@types/readable-stream": "^2.3.15",
+    "@types/split2": "^3.2.1",
     "@typescript-eslint/eslint-plugin": "^5.45.1",
     "@typescript-eslint/parser": "^5.45.1",
     "esbuild": "^0.16.1",
@@ -34,6 +46,9 @@
     "typescript": "^4.9.3"
   },
   "dependencies": {
-    "chalk": "^5.2.0"
+    "chalk": "^5.2.0",
+    "pump": "^3.0.0",
+    "readable-stream": "^4.2.0",
+    "split2": "^4.1.0"
   }
 }
