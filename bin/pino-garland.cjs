@@ -5,14 +5,14 @@ const pump = require("pump");
 const split = require("split2");
 const { Transform } = require("readable-stream");
 
-const { parse } = require("../dist/pino-garland.cjs");
+const { parse, print, printUnknown } = require("../dist/pino-garland.cjs");
 
 const pretty = (/** @type {any} */ jsonLine) => {
   try {
     const logObject = parse(jsonLine);
-    return JSON.stringify(logObject, null, 2);
+    return print(logObject);
   } catch (e) {
-    return jsonLine;
+    return printUnknown(jsonLine);
   }
 };
 
