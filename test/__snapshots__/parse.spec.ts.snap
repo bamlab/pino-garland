@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parse should throw an error if the log line does not have a level 1`] = `"Log line doesn't have a level"`;
+
+exports[`parse should throw an error if the log line is not valid JSON 1`] = `"Unexpected token o in JSON at position 1"`;

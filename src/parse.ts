@@ -1,7 +1,7 @@
 import { ParseError } from "./errors/ParseError";
 import { getErrorMessage } from "./utils/getErrorMessage";
 
-export function parse(logJsonLine: string): HumanLogData {
+export function parse(logJsonLine: string): LogDataWithLevelName {
   try {
     const logData = JSON.parse(logJsonLine);
 
@@ -20,7 +20,7 @@ export function parse(logJsonLine: string): HumanLogData {
   }
 }
 
-function replaceLevelWithLevelName(logData: PinoLogData): HumanLogData {
+function replaceLevelWithLevelName(logData: LogDataWithLevelNumber): LogDataWithLevelName {
   let level: string;
   if (logData.level === 10) level = "trace";
   else if (logData.level === 20) level = "debug";
