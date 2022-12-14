@@ -1,4 +1,4 @@
-import { FormatDate, FormatRequestId } from "../src/format";
+import { FormatDate, FormatLevel, FormatRequestId } from "../src/format";
 
 describe("format", () => {
   describe("formatDate", () => {
@@ -67,4 +67,36 @@ describe("format", () => {
       expect(placeholder).toEqual("[      no request       ]");
     });
   });
+
+  describe("formatLevel", () => {
+    it("should format a level", () => {
+      // Given
+      const logData = { level: "info" };
+      // When
+      const formatLevel = new FormatLevel();
+      const formattedLevel = formatLevel.format(logData);
+      // Then
+      expect(formattedLevel).toEqual("✨");
+    });
+
+    it("should refuse to format if the log data does not have a level", () => {
+      // Given
+      const logData = {};
+      // When
+      const formatLevel = new FormatLevel();
+      const canFormat = formatLevel.canFormat(logData);
+      // Then
+      expect(canFormat).toEqual(false);
+    });
+
+    it("should return a placeholder of the right length", () => {
+      // Given
+      // When
+      const formatLevel = new FormatLevel();
+      const placeholder = formatLevel.placeholder();
+      // Then
+      expect(placeholder).toEqual("🤷‍♂️");
+    });
+  });
+
 });

@@ -1,3 +1,3 @@
 export { parse } from "./parse";
-export { FormatDate, FormatRequestId } from "./format";
+export { FormatDate, FormatLevel, FormatRequestId } from "./format";
 export { print, printUnknown } from "./print";

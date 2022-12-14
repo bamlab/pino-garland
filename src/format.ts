@@ -3,7 +3,7 @@ import { center, padNumber } from "./utils/text";
 
 export abstract class Format {
   abstract canFormat(logData: LogData): boolean;
-  abstract format(logData: LogData): string;
+  abstract format(logData: LogDataWithLevelName): string;
   abstract placeholder(): string;
 }
 
@@ -58,5 +58,33 @@ export class FormatRequestId extends Format {
   placeholder(): string {
     const placeholderRequestId = center("no request", this.SIZE);
     return chalk.grey(`[${placeholderRequestId}]`);
+  }
+}
+
+export class FormatLevel extends Format {
+  private EMOJIS: Record<string, string> = {
+    trace: "🔍",
+    debug: "🐛",
+    info: "✨",
+    warn: "⚠️ ",
+    error: "🚨",
+    fatal: "💀",
+  };
+
+  constructor() {
+    super();
+  }
+
+  canFormat(logData: { level?: string | number }): boolean {
+    return logData.level !== undefined;
+  }
+
+  format(logData: { level: string }): string {
+    const emoji = this.EMOJIS[logData.level] || "🤷‍♂️";
+    return chalk.bold(`${emoji}`);
+  }
+
+  placeholder(): string {
+    return chalk.bold(`🤷‍♂️`);
   }
 }
