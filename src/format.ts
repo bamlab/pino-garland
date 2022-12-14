@@ -179,3 +179,71 @@ export class FormatMessage extends Format {
     return "";
   }
 }
+
+export class FormatHTTP extends Format {
+  canFormat(logData: {
+    msg: string;
+    req: { method: string; url: string };
+    res?: { statusCode: number };
+    err?: { response: { statusCode: number }; name: string };
+    responseTime?: number;
+  }): boolean {
+    if (isMarkingRequestStart(logData.msg)) {
+      return (
+        logData.req?.method !== undefined && //
+        logData.req?.url !== undefined
+      );
+    }
+    if (isMarkingRequestSuccess(logData.msg)) {
+      return (
+        logData.req?.method !== undefined && //
+        logData.req?.url !== undefined &&
+        logData.res?.statusCode !== undefined &&
+        logData.responseTime !== undefined
+      );
+    }
+    if (isMarkingRequestError(logData.msg)) {
+      return (
+        logData.req?.method !== undefined &&
+        logData.req?.url !== undefined &&
+        logData.err?.response?.statusCode !== undefined &&
+        logData.err?.name !== undefined &&
+        logData.responseTime !== undefined
+      );
+    }
+    return false;
+  }
+
+  format(logData: {
+    msg: string;
+    req: { method: string; url: string };
+    res?: { statusCode: number; message?: string };
+    err?: { response: { statusCode: number }; name: string };
+    responseTime?: number;
+  }): string {
+    const { msg, req, res, responseTime, err } = logData;
+
+    let httpMessage = "";
+
+    if (isMarkingRequestStart(msg)) {
+      httpMessage += chalk.whiteBright(`${req.method} ${req.url}`);
+    }
+    if (isMarkingRequestSuccess(msg)) {
+      httpMessage += chalk.gray(`${req.method} ${req.url}`);
+      httpMessage += chalk.whiteBright(` status: ${res?.statusCode}`);
+      httpMessage += chalk.gray(` (in ${responseTime}ms)`);
+    }
+    if (isMarkingRequestError(msg)) {
+      httpMessage += chalk.gray(`${req.method} ${req.url}`);
+      httpMessage += chalk.red(` status: ${err?.response?.statusCode} ${err?.name}`);
+      httpMessage += chalk.gray(` (in ${responseTime}ms)`);
+    }
+
+    return chalk.white(httpMessage);
+  }
+
+  placeholder(): string {
+    return "";
+  }
+}
+}

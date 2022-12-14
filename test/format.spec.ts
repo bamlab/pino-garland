@@ -1,4 +1,4 @@
-import { FormatContext, FormatDate, FormatLevel, FormatMessage, FormatRequestId } from "../src/format";
+import { FormatContext, FormatDate, FormatHTTP, FormatLevel, FormatMessage, FormatRequestId } from "../src/format";
 
 describe("format", () => {
   describe("formatDate", () => {
@@ -191,6 +191,85 @@ describe("format", () => {
       const formattedMessage = formatMessage.format(logData);
       // Then
       expect(formattedMessage).toEqual("📢 -->");
+    });
+  });
+
+  describe("format HTTP", () => {
+    it("should format a HTTP request", () => {
+      // Given
+      const logData = {
+        msg: "REQUEST START",
+        req: {
+          id: "722449b6-850b-4c50-8784-1ca18007b588",
+          method: "GET",
+          url: "/my-url",
+          headers: {
+            "content-type": "application/json",
+            "user-agent": "my-user-agent",
+          },
+        },
+      };
+      // When
+      const formatHttp = new FormatHTTP();
+      const formattedHttp = formatHttp.format(logData);
+      // Then
+      expect(formattedHttp).toEqual("GET /my-url");
+    });
+
+    it("should format a HTTP response", () => {
+      // Given
+      const logData = {
+        msg: "REQUEST SUCCESS",
+        req: {
+          id: "722449b6-850b-4c50-8784-1ca18007b588",
+          method: "GET",
+          url: "/my-url",
+          headers: {
+            "content-type": "application/json",
+            "user-agent": "my-user-agent",
+          },
+        },
+        res: {
+          statusCode: 200,
+        },
+        responseTime: 100,
+      };
+      // When
+      const formatHttp = new FormatHTTP();
+      const formattedHttp = formatHttp.format(logData);
+      // Then
+      expect(formattedHttp).toEqual("GET /my-url status: 200 (in 100ms)");
+    });
+
+    it("should format a HTTP error", () => {
+      // Given
+      const logData = {
+        msg: "REQUEST ERROR",
+        req: {
+          id: "722449b6-850b-4c50-8784-1ca18007b588",
+          method: "GET",
+          url: "/my-url",
+          headers: {
+            "content-type": "application/json",
+            "user-agent": "my-user-agent",
+          },
+        },
+        res: {
+          statusCode: 400,
+        },
+        err: {
+          response: {
+            statusCode: 400,
+          },
+          name: "Bad Request",
+        },
+        responseTime: 100,
+      };
+      // When
+      const formatHttp = new FormatHTTP();
+      const formattedHttp = formatHttp.format(logData);
+      // Then
+      expect(formattedHttp).toEqual("GET /my-url status: 400 Bad Request (in 100ms)");
     });
   });
 });
