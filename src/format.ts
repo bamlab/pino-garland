@@ -1,4 +1,9 @@
 import chalk, { ChalkInstance } from "chalk";
+import indent from "indent-string";
+import { EOL } from "node:os";
+import StackTracey from "stacktracey";
+
+import { prettyPrintObj } from "./utils/prettyPrintObject";
 import { center, padNumber } from "./utils/text";
 
 export abstract class Format {
@@ -246,4 +251,35 @@ export class FormatHTTP extends Format {
     return "";
   }
 }
+
+export class FormatError extends Format {
+  constructor() {
+    super();
+  }
+
+  canFormat(logData: { err?: Error }): boolean {
+    return logData.err !== undefined;
+  }
+
+  format(logData: { err: Error }): string {
+    const err = logData.err;
+    const stack = err.stack;
+
+    let errorMessage = "";
+    if (stack) {
+      errorMessage += chalk.red(`Message: ${err.message}`);
+      errorMessage += EOL;
+      errorMessage += chalk.red("Stacktrace:");
+      errorMessage += EOL;
+      errorMessage += indent(chalk.red(new StackTracey(stack).clean().asTable()), 2);
+    } else {
+      errorMessage += chalk.red(prettyPrintObj(err, ["message"]));
+    }
+
+    return indent(`${EOL}${EOL}${errorMessage}${EOL}`, 2);
+  }
+
+  placeholder(): string {
+    return "";
+  }
 }

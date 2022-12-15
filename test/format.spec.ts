@@ -1,4 +1,12 @@
-import { FormatContext, FormatDate, FormatHTTP, FormatLevel, FormatMessage, FormatRequestId } from "../src/format";
+import {
+  FormatContext,
+  FormatDate,
+  FormatError,
+  FormatHTTP,
+  FormatLevel,
+  FormatMessage,
+  FormatRequestId,
+} from "../src/format";
 
 describe("format", () => {
   describe("formatDate", () => {
@@ -270,6 +278,62 @@ describe("format", () => {
       const formattedHttp = formatHttp.format(logData);
       // Then
       expect(formattedHttp).toEqual("GET /my-url status: 400 Bad Request (in 100ms)");
+    });
+  });
+
+  describe("formatError", () => {
+    it("should format an error", () => {
+      // Given
+      const logData = {
+        err: {
+          name: "Error",
+          message: "my-error-message",
+          stack: "'Error,\n,    at foo (test.js:38:22)'",
+        },
+      };
+      // When
+      const formatError = new FormatError();
+      const formattedError = formatError.format(logData);
+      // Then
+      const expectedError = "\n\nMessage: my-error-message\nStacktrace:\nat foo  test.js:38  \n";
+      expect(formattedError).toEqual(expectedError);
+    });
+
+    it("should refuse to format if the log data does not have an error", () => {
+      // Given
+      const logData = {};
+      // When
+      const formatError = new FormatError();
+      const canFormat = formatError.canFormat(logData);
+      // Then
+      expect(canFormat).toEqual(false);
+    });
+
+    it("should return a placeholder of the right length", () => {
+      // Given
+      // When
+      const formatError = new FormatError();
+      const placeholder = formatError.placeholder();
+      // Then
+      expect(placeholder).toEqual("");
+    });
+
+    it("should format an error without stacktrace", () => {
+      // Given
+      const logData = {
+        err: {
+          name: "Error",
+          message: "my-error-message",
+          test: "test",
+        },
+        stack: "my-custom-stack",
+      };
+      // When
+      const formatError = new FormatError();
+      const formattedError = formatError.format(logData);
+      // Then
+      const expectedError = "\n\nmessage: my-error-message\ntest: test\n";
+      expect(formattedError).toEqual(expectedError);
     });
   });
 });

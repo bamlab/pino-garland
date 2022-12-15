@@ -1,5 +1,14 @@
 import { EOL } from "node:os";
-import { Format, FormatContext, FormatDate, FormatHTTP, FormatLevel, FormatMessage, FormatRequestId } from "./format";
+import {
+  Format,
+  FormatContext,
+  FormatDate,
+  FormatError,
+  FormatHTTP,
+  FormatLevel,
+  FormatMessage,
+  FormatRequestId,
+} from "./format";
 
 const formatters: Format[] = [
   new FormatDate(),
@@ -8,6 +17,7 @@ const formatters: Format[] = [
   new FormatContext(),
   new FormatMessage(),
   new FormatHTTP(),
+  new FormatError(),
 ];
 
 export function print(logData: LogDataWithLevelName): string {
