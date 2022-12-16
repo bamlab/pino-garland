@@ -5,7 +5,7 @@ import StackTracey from "stacktracey";
 import * as sqlFormatter from "sql-formatter";
 import { SqlHighlighter } from "@mikro-orm/sql-highlighter";
 
-import { prettyPrintObj } from "./utils/prettyPrintObject";
+import { filterOutObject, prettyPrintObj } from "./utils/prettyPrintObject";
 import { center, padNumber } from "./utils/text";
 import type { HighlightSubject } from "@mikro-orm/sql-highlighter/enums";
 
@@ -280,6 +280,26 @@ export class FormatError extends Format {
     }
 
     return indent(`${EOL}${EOL}${errorMessage}${EOL}`, 2);
+  }
+
+  placeholder(): string {
+    return "";
+  }
+}
+
+export class FormatObject extends Format {
+  constructor() {
+    super();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  canFormat(logData: any): boolean {
+    return Object.keys(filterOutObject(logData)).length > 0;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  format(logData: any): string {
+    return indent(`${EOL}${EOL}${c.magenta(prettyPrintObj(logData))}${EOL}`, 2);
   }
 
   placeholder(): string {

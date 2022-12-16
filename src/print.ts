@@ -7,6 +7,7 @@ import {
   FormatHTTP,
   FormatLevel,
   FormatMessage,
+  FormatObject,
   FormatRequestId,
   FormatSQL,
 } from "./format";
@@ -19,6 +20,7 @@ const formatters: Format[] = [
   new FormatMessage(),
   new FormatHTTP(),
   new FormatError(),
+  new FormatObject(),
   new FormatSQL(),
 ];
 

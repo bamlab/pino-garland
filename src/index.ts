@@ -6,6 +6,7 @@ export {
   FormatHTTP,
   FormatLevel,
   FormatMessage,
+  FormatObject,
   FormatRequestId,
   FormatSQL,
 } from "./format";
