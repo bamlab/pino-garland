@@ -2,7 +2,29 @@
   "name": "pino-garland",
   "version": "1.0.1",
   "description": "A pino prettifier that formats your logs in a way that is easy to read and understand.",
+  "keywords": [
+    "pino",
+    "node",
+    "logger",
+    "transport"
+  ],
+  "homepage": "https://github.com/bamlab/pino-garland",
+  "bugs": {
+    "url": "https://github.com/bamlab/pino-garland/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bamlab/pino-garland"
+  },
+  "license": "MIT",
+  "author": "TychoTa",
   "type": "module",
+  "main": "dist/pino-garland.cjs",
+  "module": "dist/pino-garland.mjs",
+  "typings": "dist/pino-garland.ts",
+  "bin": {
+    "pino-garland": "bin/pino-garland.js"
+  },
   "files": [
     "dist",
     "src",
@@ -10,23 +32,23 @@
     "docs",
     "LICENSE"
   ],
-  "main": "dist/pino-garland.cjs",
-  "module": "dist/pino-garland.mjs",
-  "typings": "dist/pino-garland.ts",
-  "bin": {
-    "pino-garland": "bin/pino-garland.js"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
-    "test": "jest",
     "build": "rollup --config",
-    "lint": "eslint src --ext .ts"
+    "lint": "eslint src --ext .ts",
+    "test": "jest"
   },
-  "keywords": [],
-  "author": "TychoTa",
-  "license": "MIT",
+  "dependencies": {
+    "@mikro-orm/sql-highlighter": "^1.0.1",
+    "@types/ansi-colors": "^3.2.2",
+    "ansi-colors": "^4.1.3",
+    "indent-string": "^5.0.0",
+    "lodash": "^4.17.21",
+    "pump": "^3.0.0",
+    "readable-stream": "^4.2.0",
+    "split2": "^4.1.0",
+    "sql-formatter": "^12.0.4",
+    "stacktracey": "^2.1.8"
+  },
   "devDependencies": {
     "@tsconfig/node18-strictest-esm": "^1.0.1",
     "@tsconfig/recommended": "^1.0.1",
@@ -51,16 +73,7 @@
     "rollup-plugin-esbuild": "^5.0.0",
     "typescript": "^4.9.3"
   },
-  "dependencies": {
-    "@mikro-orm/sql-highlighter": "^1.0.1",
-    "@types/ansi-colors": "^3.2.2",
-    "ansi-colors": "^4.1.3",
-    "indent-string": "^5.0.0",
-    "lodash": "^4.17.21",
-    "pump": "^3.0.0",
-    "readable-stream": "^4.2.0",
-    "split2": "^4.1.0",
-    "sql-formatter": "^12.0.4",
-    "stacktracey": "^2.1.8"
+  "publishConfig": {
+    "access": "public"
   }
 }
