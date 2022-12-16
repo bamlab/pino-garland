@@ -7,5 +7,6 @@ export {
   FormatLevel,
   FormatMessage,
   FormatRequestId,
+  FormatSQL,
 } from "./format";
 export { print, printUnknown } from "./print";

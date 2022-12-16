@@ -13,6 +13,8 @@ interface LogData {
   msg: string;
   err: Error & { response: { statusCode: number; name: string } };
   responseTime: number;
+  sql: string;
+  sqlParams: string[];
 }
 
 interface LogDataWithLevelNumber extends LogData {

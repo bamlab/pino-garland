@@ -2,9 +2,12 @@ import c from "ansi-colors";
 import indent from "indent-string";
 import { EOL } from "node:os";
 import StackTracey from "stacktracey";
+import * as sqlFormatter from "sql-formatter";
+import { SqlHighlighter } from "@mikro-orm/sql-highlighter";
 
 import { prettyPrintObj } from "./utils/prettyPrintObject";
 import { center, padNumber } from "./utils/text";
+import type { HighlightSubject } from "@mikro-orm/sql-highlighter/enums";
 
 export abstract class Format {
   abstract canFormat(logData: LogData): boolean;
@@ -277,6 +280,63 @@ export class FormatError extends Format {
     }
 
     return indent(`${EOL}${EOL}${errorMessage}${EOL}`, 2);
+  }
+
+  placeholder(): string {
+    return "";
+  }
+}
+
+export class FormatSQL extends Format {
+  sqlHighlighter: SqlHighlighter;
+
+  constructor() {
+    super();
+    const theme = {
+      backtickQuote: c.yellow,
+      boundary: c.reset,
+      comment: c.gray,
+      builtIn: c.magenta,
+      functions: c.green,
+      literal: c.blue,
+      number: c.green,
+      quote: c.yellow,
+      reserved: c.magenta,
+      variable: c.cyan,
+      word: c.white,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any as {
+      [K in keyof typeof HighlightSubject]?: string;
+    };
+    this.sqlHighlighter = new SqlHighlighter(theme);
+  }
+
+  canFormat(logData: { sql?: string; sqlParams?: string[] }): boolean {
+    return logData.sql !== undefined;
+  }
+
+  format(logData: { sql: string; sqlParams?: string[] }): string {
+    const { sql: query, sqlParams: params } = logData;
+
+    let formatterOptions: sqlFormatter.FormatOptionsWithLanguage;
+    if (params) {
+      const stringParams = params.map((p) => p.toString());
+      formatterOptions = {
+        language: "postgresql",
+        keywordCase: "upper",
+        params: stringParams,
+      };
+    } else {
+      formatterOptions = {
+        language: "postgresql",
+        keywordCase: "upper",
+      };
+    }
+
+    const formattedSql = sqlFormatter.format(query, formatterOptions);
+    const highlightedSql = this.sqlHighlighter.highlight(formattedSql);
+
+    return indent(`${EOL}${EOL}${highlightedSql}${EOL}`, 2);
   }
 
   placeholder(): string {

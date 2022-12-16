@@ -8,6 +8,7 @@ import {
   FormatLevel,
   FormatMessage,
   FormatRequestId,
+  FormatSQL,
 } from "./format";
 
 const formatters: Format[] = [
@@ -18,6 +19,7 @@ const formatters: Format[] = [
   new FormatMessage(),
   new FormatHTTP(),
   new FormatError(),
+  new FormatSQL(),
 ];
 
 export function print(logData: LogDataWithLevelName): string {

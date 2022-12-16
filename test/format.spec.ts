@@ -6,6 +6,7 @@ import {
   FormatLevel,
   FormatMessage,
   FormatRequestId,
+  FormatSQL,
 } from "../src/format";
 
 describe("format", () => {
@@ -334,6 +335,40 @@ describe("format", () => {
       // Then
       const expectedError = "\n\nmessage: my-error-message\ntest: test\n";
       expect(formattedError).toEqual(expectedError);
+    });
+  });
+  describe("formatSQL", () => {
+    it("should format a SQL query", () => {
+      // Given
+      const logData = {
+        msg: "QUERY",
+        sql: "SELECT * FROM 'budget' WHERE id = ?",
+        sqlParams: ["my-id"],
+      };
+      // When
+      const formatSQL = new FormatSQL();
+      const formattedSQL = formatSQL.format(logData);
+      // Then
+      expect(formattedSQL).toEqual("\n\nSELECT\n  *\nFROM\n  'budget'\nWHERE\n  id = ?\n");
+    });
+
+    it("should refuse to format if the log data does not have a query", () => {
+      // Given
+      const logData = {};
+      // When
+      const formatSQL = new FormatSQL();
+      const canFormat = formatSQL.canFormat(logData);
+      // Then
+      expect(canFormat).toEqual(false);
+    });
+
+    it("should return a placeholder of the right length", () => {
+      // Given
+      // When
+      const formatSQL = new FormatSQL();
+      const placeholder = formatSQL.placeholder();
+      // Then
+      expect(placeholder).toEqual("");
     });
   });
 });
