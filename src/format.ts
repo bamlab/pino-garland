@@ -1,4 +1,4 @@
-import chalk, { ChalkInstance } from "chalk";
+import c from "ansi-colors";
 import indent from "indent-string";
 import { EOL } from "node:os";
 import StackTracey from "stacktracey";
@@ -34,7 +34,7 @@ export class FormatDate extends Format {
     const seconds = padNumber(formattedTime.getSeconds(), 2);
     const milliseconds = padNumber(formattedTime.getMilliseconds(), 3);
 
-    return chalk.gray(`${hours}:${minutes}:${seconds}.${milliseconds}`);
+    return c.gray(`${hours}:${minutes}:${seconds}.${milliseconds}`);
   }
 
   placeholder(): string {
@@ -57,12 +57,12 @@ export class FormatRequestId extends Format {
   format(logData: { req: { id: string } }): string {
     const requestId = logData.req.id;
     const shortRequestId = requestId.substring(0, this.REQUEST_ID_SIZE);
-    return chalk.cyan(`[req: ${shortRequestId}]`);
+    return c.cyan(`[req: ${shortRequestId}]`);
   }
 
   placeholder(): string {
     const placeholderRequestId = center("no request", this.SIZE);
-    return chalk.grey(`[${placeholderRequestId}]`);
+    return c.grey(`[${placeholderRequestId}]`);
   }
 }
 
@@ -86,11 +86,11 @@ export class FormatLevel extends Format {
 
   format(logData: { level: string }): string {
     const emoji = this.EMOJIS[logData.level] || "🤷‍♂️";
-    return chalk.bold(`${emoji}`);
+    return c.bold(`${emoji}`);
   }
 
   placeholder(): string {
-    return chalk.bold(`🤷‍♂️`);
+    return c.bold(`🤷‍♂️`);
   }
 }
 
@@ -109,12 +109,12 @@ export class FormatContext extends Format {
     const { context } = logData;
     const shortContext = context.substring(0, this.MAX_SIZE);
     const paddedContext = center(shortContext, this.MAX_SIZE);
-    return chalk.yellow(`[${paddedContext}]`);
+    return c.yellow(`[${paddedContext}]`);
   }
 
   placeholder(): string {
     const paddedPlaceholder = center("-- no context --", this.MAX_SIZE);
-    return chalk.grey(`[${paddedPlaceholder}]`);
+    return c.grey(`[${paddedPlaceholder}]`);
   }
 }
 
@@ -143,37 +143,37 @@ export class FormatMessage extends Format {
     const { msg } = logData;
 
     if (isMarkingRequestStart(msg)) {
-      return chalk.white("🎤 <--");
+      return c.white("🎤 <--");
     }
     if (isMarkingRequestSuccess(msg)) {
-      return chalk.white("🎧 -->");
+      return c.white("🎧 -->");
     }
     if (isMarkingRequestError(msg)) {
-      return chalk.white("📢 -->");
+      return c.white("📢 -->");
     }
 
-    let color: ChalkInstance;
+    let color: c.StyleFunction;
     switch (logData.level) {
       case "trace":
-        color = chalk.white;
+        color = c.white;
         break;
       case "debug":
-        color = chalk.yellow;
+        color = c.yellow;
         break;
       case "info":
-        color = chalk.green;
+        color = c.green;
         break;
       case "warn":
-        color = chalk.magenta;
+        color = c.magenta;
         break;
       case "error":
-        color = chalk.red;
+        color = c.red;
         break;
       case "fatal":
-        color = chalk.white.bgRed;
+        color = c.white.bgRed;
         break;
       default:
-        color = chalk.green;
+        color = c.green;
         break;
     }
 
@@ -231,20 +231,20 @@ export class FormatHTTP extends Format {
     let httpMessage = "";
 
     if (isMarkingRequestStart(msg)) {
-      httpMessage += chalk.whiteBright(`${req.method} ${req.url}`);
+      httpMessage += c.whiteBright(`${req.method} ${req.url}`);
     }
     if (isMarkingRequestSuccess(msg)) {
-      httpMessage += chalk.gray(`${req.method} ${req.url}`);
-      httpMessage += chalk.whiteBright(` status: ${res?.statusCode}`);
-      httpMessage += chalk.gray(` (in ${responseTime}ms)`);
+      httpMessage += c.gray(`${req.method} ${req.url}`);
+      httpMessage += c.whiteBright(` status: ${res?.statusCode}`);
+      httpMessage += c.gray(` (in ${responseTime}ms)`);
     }
     if (isMarkingRequestError(msg)) {
-      httpMessage += chalk.gray(`${req.method} ${req.url}`);
-      httpMessage += chalk.red(` status: ${err?.response?.statusCode} ${err?.name}`);
-      httpMessage += chalk.gray(` (in ${responseTime}ms)`);
+      httpMessage += c.gray(`${req.method} ${req.url}`);
+      httpMessage += c.red(` status: ${err?.response?.statusCode} ${err?.name}`);
+      httpMessage += c.gray(` (in ${responseTime}ms)`);
     }
 
-    return chalk.white(httpMessage);
+    return c.white(httpMessage);
   }
 
   placeholder(): string {
@@ -267,13 +267,13 @@ export class FormatError extends Format {
 
     let errorMessage = "";
     if (stack) {
-      errorMessage += chalk.red(`Message: ${err.message}`);
+      errorMessage += c.red(`Message: ${err.message}`);
       errorMessage += EOL;
-      errorMessage += chalk.red("Stacktrace:");
+      errorMessage += c.red("Stacktrace:");
       errorMessage += EOL;
-      errorMessage += indent(chalk.red(new StackTracey(stack).clean().asTable()), 2);
+      errorMessage += indent(c.red(new StackTracey(stack).clean().asTable()), 2);
     } else {
-      errorMessage += chalk.red(prettyPrintObj(err, ["message"]));
+      errorMessage += c.red(prettyPrintObj(err, ["message"]));
     }
 
     return indent(`${EOL}${EOL}${errorMessage}${EOL}`, 2);
