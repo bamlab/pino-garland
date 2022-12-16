@@ -1,6 +1,6 @@
 {
   "name": "pino-garland",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A pino prettifier that formats your logs in a way that is easy to read and understand.",
   "type": "module",
   "files": [
