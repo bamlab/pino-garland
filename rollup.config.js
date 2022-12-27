@@ -21,11 +21,13 @@ export default [
         file: `${name}.cjs`,
         format: "cjs",
         sourcemap: true,
+        exports: "named",
       },
       {
         file: `${name}.mjs`,
         format: "es",
         sourcemap: true,
+        exports: "named",
       },
     ],
   }),
