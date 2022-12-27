@@ -23,10 +23,17 @@ npm install pino-garland
 
 ## Usage
 
+```js
+const pino = require('pino')
+const transport = pino.transport({
+  target: '/absolute/path/to/my-transport.mjs'
+})
+pino(transport)
+```
+
+### Legacy
+
 ```bash
 pnpm run server | pino-garland
 ```
 
-## TODO
-
-- [ ] Add compatibility with V7 transport: https://github.com/pinojs/pino/blob/master/docs/transports.md#v7-transports
