@@ -4,7 +4,7 @@ import esbuild from "rollup-plugin-esbuild";
 import { createRequire } from "module";
 const pkg = createRequire(import.meta.url)("./package.json");
 
-const name = pkg.main.replace(/\.c?js$/, "");
+const name = pkg.main.replace(/\.[cm]?js$/, "");
 
 /** @type {(config: import('rollup').RollupOptions) => import('rollup').RollupOptions} */
 const bundle = (config) => ({

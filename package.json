@@ -19,7 +19,7 @@
   "license": "MIT",
   "author": "TychoTa",
   "type": "module",
-  "main": "dist/pino-garland.cjs",
+  "main": "dist/pino-garland.mjs",
   "module": "dist/pino-garland.mjs",
   "typings": "dist/pino-garland.ts",
   "bin": {
