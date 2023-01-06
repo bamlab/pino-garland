@@ -25,6 +25,7 @@ const PINO_SPECIFIC_KEYS = [
   "sql",
   "sqlParams",
   "trace",
+  "err",
 ];
 const MAX_NUMBER_OF_LINES = 80;
 
